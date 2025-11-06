@@ -1,3 +1,6 @@
+# The purpose of this file is to house all of the different settings of the application and to export them out.
+
+
 from pydantic_settings import BaseSettings
 from pydantic import Field, SecretStr
 
@@ -17,12 +20,3 @@ class Settings(BaseSettings):
         env_file = ".env"
         env_file_encoding = "utf-8"
         extra = "ignore"
-
-# LLM_PROVIDER: str = Settings.LLM_PROVIDER
-# LLM_TEMPERATURE: float = Settings.LLM_TEMPERATURE
-# LLM_MODEL: str = Settings.LLM_MODEL
-# GROQ_API_KEY: SecretStr = Settings.GROQ_API_KEY
-# EMBEDDING_MODEL_NAME: str = Settings.EMBEDDING_MODEL_NAME
-# EMBEDDING_DEVICE: str = Settings.EMBEDDING_DEVICE
-# EMBEDDING_NORMALIZE: bool = Settings.EMBEDDING_NORMALIZE
-# EMBEDDING_BATCH_SIZE: int = Settings.EMBEDDING_BATCH_SIZE
