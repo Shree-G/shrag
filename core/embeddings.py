@@ -1,8 +1,9 @@
+# The purpose of this file is to create a function that returns the embedding model that we'll be using for this application
+# We import in settings from app.settings that contains embedding information, and we use HuggingFacEmbeddings to create an embedding model
+
+
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_core.embeddings import Embeddings
-from pydantic import Field
-from pydantic_settings import BaseSettings
-from sentence_transformers import SentenceTransformer
 from app.settings import Settings
 
 def get_embedding_model() -> Embeddings:
