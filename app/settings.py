@@ -14,9 +14,12 @@ class Settings(BaseSettings):
     EMBEDDING_DEVICE: str = Field("cpu", env="EMBEDDING_DEVICE")
     EMBEDDING_NORMALIZE: bool = Field(False, env="EMBEDDING_NORMALIZE")
     EMBEDDING_BATCH_SIZE: int = Field(1, env="EMBEDDING_BATCH_SIZE")
+    GITHUB_USERNAME: str = Field(..., env = "GITHUB_USERNAME")
 
 
     class Config():
         env_file = ".env"
         env_file_encoding = "utf-8"
         extra = "ignore"
+
+# GITHUB_USERNAME : str = Settings.GITHUB_USERNAME
