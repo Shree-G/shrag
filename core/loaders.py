@@ -29,8 +29,8 @@ def load_all_documents() -> List[Document]:
         print(f"Error: could not get resume file path")
         return
 
-    resume_doc : Document = load_resume(resume_file_path)
-    readme_docs : List[Document] = load_github_readmes(settings.GITHUB_USERNAME, GIT_TEMP_CLONE_DIR)
+    resume_doc = load_resume(resume_file_path)
+    readme_docs = load_github_readmes(settings.GITHUB_USERNAME, GIT_TEMP_CLONE_DIR)
 
     all_docs = readme_docs + resume_doc
     print(f"Total documents loaded: {len(all_docs)}")
@@ -38,20 +38,21 @@ def load_all_documents() -> List[Document]:
     return all_docs
 
 
-def load_resume(resumePath: str) -> Document:
+def load_resume(resumePath: str) -> List[Document]:
     print(f"Loading Resume from file path: {resumePath}")
     if not os.path.exists(resumePath):
         print(f"Error: Resume not find in file path: {resumePath}")
         return
 
     try:
-        resumeLoader = PyPDFLoader.load(resumePath)
+        resumeLoader = PyPDFLoader(resumePath)
         resumeDoc = resumeLoader.load()
-        resumeDoc.metadata["source_name"] = "resume"
-        resumeDoc.metadata["source_file"] = resumePath
+        for doc in resumeDoc:
+            doc.metadata["source_name"] = "resume"
+            doc.metadata["source_file"] = os.path.basename(resumePath)
         return resumeDoc
-    except:
-        print("Error: Resume was not able to be loaded")
+    except Exception as e:
+        print(f"Error: Resume was not able to be loaded: {e}")
         return
 
 
