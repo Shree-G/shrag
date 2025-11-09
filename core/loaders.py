@@ -56,7 +56,7 @@ def load_resume(resumePath: str) -> List[Document]:
         return
 
 
-def _get_public_repo_urls(username: str) -> List[str]:
+def _get_public_repo_details(username: str) -> List[str]:
     api_url = f"https://api.github.com/users/{username}/repos"
 
     response = requests.get(api_url, params={"type": "owner", "per_page": 100 })
@@ -65,7 +65,7 @@ def _get_public_repo_urls(username: str) -> List[str]:
     repos = response.json()
 
     non_forked_urls = [
-        repo["clone_url"] for repo in repos 
+        (repo["clone_url"], repo["default_branch"]) for repo in repos 
         if not repo["fork"] and repo["clone_url"]
     ]
     
@@ -86,28 +86,32 @@ def _cleanup_temp_dir(dir) -> bool:
     
 
 def load_github_readmes(username: str, clone_dir: str) -> List[Document]:
-    repo_urls = _get_public_repo_urls(username)
+    repo_details = _get_public_repo_details(username)
 
     readme_docs = []
 
-    if not repo_urls:
+    if not repo_details:
         print(f"No Repositories found for f{username}")
         return []
     
-    for url in repo_urls:
+    for (url, branch) in repo_details:
         repo_name = url.split('/')[-1]
         local_repo_path = os.path.join(clone_dir, repo_name)
 
         try:
-            print(f"Loading README from: {url}")
+            print(f"Attempting to load README from: {url} (branch: {branch})")
             # This lambda function is the filter
             readme_loader = GitLoader(
                 repo_path=local_repo_path,
                 clone_url=url,
-                file_filter=lambda file_path: file_path.lower().endswith("readme.md")
+                file_filter=lambda file_path: file_path.lower().endswith("readme.md"),
+                branch = branch
             )
 
             repo_docs = readme_loader.load()
+
+            if repo_docs == []:
+                print(f"No README found for {url} in branch {branch}")
 
             for doc in repo_docs:
                 doc.metadata["source_type"] = "github"
