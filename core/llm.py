@@ -1,5 +1,4 @@
 from langchain_groq import ChatGroq
-import os
 from dotenv import load_dotenv
 from pydantic_settings import BaseSettings
 from pydantic import Field, SecretStr

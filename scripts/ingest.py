@@ -35,7 +35,7 @@ def main():
 
     try:
         print(f"Clearing old data from collection: {vector_store._collection.name}...")
-        vector_store.delete_collection()
+        vector_store.reset_collection()
         print("Old data cleared.")
     except Exception as e:
         # This is expected on the very first run when the
