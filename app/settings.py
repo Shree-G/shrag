@@ -1,6 +1,5 @@
 # The purpose of this file is to house all of the different settings of the application and to export them out.
 
-
 from pydantic_settings import BaseSettings
 from pydantic import Field, SecretStr
 
@@ -19,6 +18,9 @@ class Settings(BaseSettings):
     VECTOR_DB_PATH: str = Field("/vector_db_store", env = "VECTOR_DB_PATH")
     VECTOR_DB_NAME: str = Field("resume_rag", env = "VECTOR_DB_NAME")
     K_NEIGHBORS: str = Field(10, env = "K_NEIGHBORS")
+
+    CHUNK_SIZE: str = Field(1000, env = "CHUNK_SIZE")
+    CHUNK_OVERLAP: str = Field(200, env = "CHUNK_OVERLAP")
 
 
     class Config():
