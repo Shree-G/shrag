@@ -1,8 +1,8 @@
 # The purpose of this file is to load all of our different sources into documents. These sources are:
 # 1. Resume
 # 2. GitHub Public repository README's
-# 3. Transcript -> Class Information (This can probably be done with a LLM call) (last priority)
 # FUTURE:
+# 3. Transcript -> Class Information (This can probably be done with a LLM call)
 # 4. Connected to my blog
 # 5. Connected to my LinkedIn posts if it has information not in blogs
 

@@ -5,6 +5,7 @@ langchain-huggingface
 pypdf
 sentence-transformers
 chromadb
+langchain-chroma
 langchain-groq
 python-dotenv
 pydantic

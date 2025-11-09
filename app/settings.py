@@ -16,6 +16,10 @@ class Settings(BaseSettings):
     EMBEDDING_BATCH_SIZE: int = Field(1, env="EMBEDDING_BATCH_SIZE")
     GITHUB_USERNAME: str = Field(..., env = "GITHUB_USERNAME")
 
+    VECTOR_DB_PATH: str = Field("/vector_db_store", env = "VECTOR_DB_PATH")
+    VECTOR_DB_NAME: str = Field("resume_rag", env = "VECTOR_DB_NAME")
+    K_NEIGHBORS: str = Field(10, env = "K_NEIGHBORS")
+
 
     class Config():
         env_file = ".env"
