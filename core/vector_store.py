@@ -1,4 +1,4 @@
-# The purpose of this file is to initialize and return a vector store using ChromaDB
+# The purpose of this file is to initialize and return a vector store using ChromaDB as well as a retriever
 # This file will import in the embeddings function created in embeddings.py to use in the vector store
 
 import chromadb
