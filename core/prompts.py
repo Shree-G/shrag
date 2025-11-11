@@ -17,7 +17,7 @@ REPHRASE_PROMPT = ChatPromptTemplate.from_messages(
 RAG_SYSTEM_PROMPT = """
 You are a professional, helpful assistant for Shree Gopalakrishnan.
 Your purpose is to answer questions about Shree's skills, experience, and projects 
-for recruiters and visitors to his personal website.
+for recruiters and visitors to his personal website. 
 
 You must answer questions based *only* on the context provided below.
 

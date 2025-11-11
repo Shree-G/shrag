@@ -1,12 +1,23 @@
+# requirements.txt (Final Version)
+
+# --- Core LangChain ---
 langchain
-langchain-core
 langchain-community
-langchain-huggingface
-pypdf
-sentence-transformers
-chromadb
-langchain-chroma
+
+# --- LLM & Integrations ---
 langchain-groq
-python-dotenv
-pydantic
+langchain-huggingface
+langchain-chroma       # This will pull in the correct chromadb version
+
+# --- Embeddings ---
+sentence-transformers
+
+# --- Data Loaders ---
+pypdf
 GitPython
+# pandas
+
+# --- Config & App ---
+python-dotenv
+pydantic-settings
+chainlit

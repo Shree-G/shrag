@@ -17,7 +17,7 @@ class Settings(BaseSettings):
 
     VECTOR_DB_PATH: str = Field("/vector_db_store", env = "VECTOR_DB_PATH")
     VECTOR_DB_NAME: str = Field("resume_rag", env = "VECTOR_DB_NAME")
-    K_NEIGHBORS: int = Field(10, env = "K_NEIGHBORS")
+    K_NEIGHBORS: int = Field(5, env = "K_NEIGHBORS")
 
     CHUNK_SIZE: int = Field(1000, env = "CHUNK_SIZE")
     CHUNK_OVERLAP: int = Field(200, env = "CHUNK_OVERLAP")
