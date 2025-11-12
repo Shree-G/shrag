@@ -6,6 +6,7 @@ from pydantic import Field, SecretStr
 class Settings(BaseSettings):
     LLM_PROVIDER: str = Field("groq", env="LLM_PROVIDER")
     LLM_TEMPERATURE: float = Field(0.0, env = "LLM_TEMPERATURE")
+    #LLM_MODEL: str = Field("llama-3.1-8B-instant", env = "LLM_MODEL")
     LLM_MODEL: str = Field("llama-3.3-70b-versatile", env = "LLM_MODEL")
     GROQ_API_KEY: SecretStr = Field(..., env = "GROQ_API_KEY")
 
@@ -17,7 +18,7 @@ class Settings(BaseSettings):
 
     VECTOR_DB_PATH: str = Field("/vector_db_store", env = "VECTOR_DB_PATH")
     VECTOR_DB_NAME: str = Field("resume_rag", env = "VECTOR_DB_NAME")
-    K_NEIGHBORS: int = Field(5, env = "K_NEIGHBORS")
+    K_NEIGHBORS: int = Field(3, env = "K_NEIGHBORS")
 
     CHUNK_SIZE: int = Field(1000, env = "CHUNK_SIZE")
     CHUNK_OVERLAP: int = Field(200, env = "CHUNK_OVERLAP")
