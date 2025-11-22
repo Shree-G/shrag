@@ -1,8 +1,8 @@
 # The purpose of this file is to load all of our different sources into documents. These sources are:
 # 1. Resume
 # 2. GitHub Public repository README's
-# 3. Transcript -> Class Information (This can probably be done with a LLM call) (last priority)
 # FUTURE:
+# 3. Transcript -> Class Information (This can probably be done with a LLM call)
 # 4. Connected to my blog
 # 5. Connected to my LinkedIn posts if it has information not in blogs
 
@@ -29,8 +29,8 @@ def load_all_documents() -> List[Document]:
         print(f"Error: could not get resume file path")
         return
 
-    resume_doc : Document = load_resume(resume_file_path)
-    readme_docs : List[Document] = load_github_readmes(settings.GITHUB_USERNAME, GIT_TEMP_CLONE_DIR)
+    resume_doc = load_resume(resume_file_path)
+    readme_docs = load_github_readmes(settings.GITHUB_USERNAME, GIT_TEMP_CLONE_DIR)
 
     all_docs = readme_docs + resume_doc
     print(f"Total documents loaded: {len(all_docs)}")
@@ -38,24 +38,25 @@ def load_all_documents() -> List[Document]:
     return all_docs
 
 
-def load_resume(resumePath: str) -> Document:
+def load_resume(resumePath: str) -> List[Document]:
     print(f"Loading Resume from file path: {resumePath}")
     if not os.path.exists(resumePath):
         print(f"Error: Resume not find in file path: {resumePath}")
         return
 
     try:
-        resumeLoader = PyPDFLoader.load(resumePath)
+        resumeLoader = PyPDFLoader(resumePath)
         resumeDoc = resumeLoader.load()
-        resumeDoc.metadata["source_name"] = "resume"
-        resumeDoc.metadata["source_file"] = resumePath
+        for doc in resumeDoc:
+            doc.metadata["source_name"] = "resume"
+            doc.metadata["source_file"] = os.path.basename(resumePath)
         return resumeDoc
-    except:
-        print("Error: Resume was not able to be loaded")
+    except Exception as e:
+        print(f"Error: Resume was not able to be loaded: {e}")
         return
 
 
-def _get_public_repo_urls(username: str) -> List[str]:
+def _get_public_repo_details(username: str) -> List[str]:
     api_url = f"https://api.github.com/users/{username}/repos"
 
     response = requests.get(api_url, params={"type": "owner", "per_page": 100 })
@@ -64,7 +65,7 @@ def _get_public_repo_urls(username: str) -> List[str]:
     repos = response.json()
 
     non_forked_urls = [
-        repo["clone_url"] for repo in repos 
+        (repo["clone_url"], repo["default_branch"]) for repo in repos 
         if not repo["fork"] and repo["clone_url"]
     ]
     
@@ -85,28 +86,32 @@ def _cleanup_temp_dir(dir) -> bool:
     
 
 def load_github_readmes(username: str, clone_dir: str) -> List[Document]:
-    repo_urls = _get_public_repo_urls(username)
+    repo_details = _get_public_repo_details(username)
 
     readme_docs = []
 
-    if not repo_urls:
+    if not repo_details:
         print(f"No Repositories found for f{username}")
         return []
     
-    for url in repo_urls:
+    for (url, branch) in repo_details:
         repo_name = url.split('/')[-1]
         local_repo_path = os.path.join(clone_dir, repo_name)
 
         try:
-            print(f"Loading README from: {url}")
+            print(f"Attempting to load README from: {url} (branch: {branch})")
             # This lambda function is the filter
             readme_loader = GitLoader(
                 repo_path=local_repo_path,
                 clone_url=url,
-                file_filter=lambda file_path: file_path.lower().endswith("readme.md")
+                file_filter=lambda file_path: file_path.lower().endswith("readme.md"),
+                branch = branch
             )
 
             repo_docs = readme_loader.load()
+
+            if repo_docs == []:
+                print(f"No README found for {url} in branch {branch}")
 
             for doc in repo_docs:
                 doc.metadata["source_type"] = "github"
