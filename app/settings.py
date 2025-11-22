@@ -18,7 +18,7 @@ class Settings(BaseSettings):
 
     VECTOR_DB_PATH: str = Field("./vector_db_store", env = "VECTOR_DB_PATH")
     VECTOR_DB_COLLECTION_NAME: str = Field("resume_rag", env = "VECTOR_DB_NAME")
-    RETRIEVER_K_VALUE: int = Field(7, env="RETRIEVER_K_VALUE") 
+    RETRIEVER_K_VALUE: int = Field(12, env="RETRIEVER_K_VALUE") 
     
     # 2. The "Strict Filter": How many docs to send to the LLM after reranking
     # RERANKER_TOP_N: int = Field(3, env="RERANKER_TOP_N")
